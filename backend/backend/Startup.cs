@@ -10,6 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using backend.Models;
+using backend.Data;
 
 namespace backend
 {
@@ -25,7 +28,13 @@ namespace backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // services.AddDbContext<UserContext>(opt => opt.UseInMemoryDatabase("HungyMonkeyDatabase"));
+            services.AddDbContext<UserContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("HungyMonkeyDatabase")));
             services.AddControllers();
+
+            services.AddDbContext<backendContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("backendContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
